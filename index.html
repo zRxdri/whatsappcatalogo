@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WhatsApp Shop - Admin Pro</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .animate-slide-up { animation: slideUp 0.3s ease-out; }
+        @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+</head>
+<body class="bg-gray-50 pb-24 font-sans">
+
+    <nav class="bg-white p-4 shadow-sm sticky top-0 z-40 flex justify-center items-center">
+        <h1 id="titulo-tienda" class="text-xl font-black text-blue-600 select-none cursor-pointer">WHATSAPP SHOP</h1>
+    </nav>
+
+    <section id="seccion-cliente" class="container mx-auto max-w-2xl">
+        <div class="sticky top-[60px] bg-gray-50 py-4 z-30 px-4">
+            <div id="filtros-categorias" class="flex gap-2 overflow-x-auto no-scrollbar"></div>
+        </div>
+        <div id="grid-productos" class="grid grid-cols-1 gap-4 px-4"></div>
+    </section>
+
+    <section id="seccion-admin" class="container mx-auto p-4 max-w-2xl hidden">
+        <div class="flex justify-between items-center mb-4">
+            <h2 class="text-2xl font-bold text-gray-800">Panel Admin</h2>
+            <button onclick="mostrarSeccion('cliente')" class="bg-gray-200 px-4 py-2 rounded-xl text-sm font-bold">Cerrar</button>
+        </div>
+        
+        <div class="bg-white p-5 rounded-2xl shadow-sm border mb-8">
+            <form id="form-producto" class="space-y-4">
+                <input type="hidden" id="edit-id">
+                <input type="text" id="nombre" placeholder="Nombre del producto" class="w-full p-3 border rounded-xl outline-none focus:ring-2 focus:ring-blue-500" required>
+                <input type="number" id="precio" placeholder="Precio (Bs)" class="w-full p-3 border rounded-xl outline-none focus:ring-2 focus:ring-blue-500" required>
+                <input type="text" id="categoria" placeholder="Categoría (Ej: Bebidas)" class="w-full p-3 border rounded-xl outline-none focus:ring-2 focus:ring-blue-500" required>
+                
+                <div class="flex flex-col gap-2">
+                    <label class="text-sm font-bold text-gray-500">Imagen del producto:</label>
+                    <input type="file" id="input-foto" accept="image/*" class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 cursor-pointer">
+                    <div id="previsualizacion" class="hidden w-20 h-20 rounded-lg border overflow-hidden mt-2">
+                        <img id="img-preview" src="" class="w-full h-full object-cover">
+                    </div>
+                </div>
+
+                <button type="submit" id="btn-form" class="w-full bg-blue-600 text-white p-3 rounded-xl font-bold hover:bg-blue-700 transition">Guardar Producto</button>
+            </form>
+        </div>
+
+        <div id="lista-admin" class="space-y-3"></div>
+    </section>
+
+    <div id="ventana-carrito" class="fixed inset-0 bg-black/50 z-50 hidden flex items-end">
+        <div class="bg-white w-full max-w-2xl mx-auto rounded-t-3xl p-6 animate-slide-up shadow-2xl">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold text-gray-800">Tu Pedido</h2>
+                <button onclick="toggleCarrito()" class="text-gray-400 text-3xl">&times;</button>
+            </div>
+            <div id="items-carrito" class="max-h-64 overflow-y-auto mb-6 space-y-4"></div>
+            <div class="border-t pt-4">
+                <div class="flex justify-between text-2xl font-black mb-6">
+                    <span>Total:</span>
+                    <span id="total-ventana" class="text-green-700">0.00 Bs</span>
+                </div>
+                <button onclick="enviarPedido()" class="w-full bg-green-600 text-white py-4 rounded-2xl font-bold text-lg flex items-center justify-center gap-3">
+                    <i class="fab fa-whatsapp text-2xl"></i> Enviar a WhatsApp
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="barra-carrito" class="fixed bottom-0 left-0 right-0 bg-white border-t p-4 shadow-lg hidden cursor-pointer" onclick="toggleCarrito()">
+        <div class="max-w-2xl mx-auto flex justify-between items-center px-4">
+            <div class="flex items-center gap-4">
+                <div class="bg-green-100 text-green-700 w-12 h-12 rounded-xl relative flex items-center justify-center text-xl font-bold">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span id="badge-carrito" class="absolute -top-2 -right-2 bg-red-500 text-white text-xs w-6 h-6 rounded-full flex items-center justify-center border-2 border-white">0</span>
+                </div>
+                <span class="font-bold">Ver pedido</span>
+            </div>
+            <p id="total-barra" class="text-2xl font-black text-green-700">0.00 Bs</p>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
